@@ -1,10 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Start page.</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block content %}
     {% if posts %}
     <ul>
         {% for post in posts %}
@@ -17,6 +12,5 @@
     </ul>
     {% else %}
         <h2>No posts available</h2>
-    {% endif %}
-</body>
-</html>
+    {% endif %}    
+{% endblock content %}

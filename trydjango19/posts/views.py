@@ -1,4 +1,3 @@
-from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 
@@ -13,9 +12,7 @@ def post_create(request):
         post = form.save(commit=False)
         post.save()
         messages.success(request, "Post successfull created.")
-        return HttpResponseRedirect(post.get_absolute_url())
-    else:
-        messages.error(request, "Post creation error.")
+        return redirect(post.get_absolute_url())
     context = {"form": form}
     return render(request, "post_form.html", context)
 
@@ -29,7 +26,7 @@ def post_detail(request, post_id=None):
 
 def post_list(request):
     posts = Post.objects.all()
-    return render(request, "index.html", {"posts": posts})
+    return render(request, "post_list.html", {"posts": posts})
 
 
 def post_update(request, post_id):
@@ -39,7 +36,7 @@ def post_update(request, post_id):
         post = form.save(commit=False)
         post.save()
         messages.success(request, "Post successfull saved.")
-        return HttpResponseRedirect(post.get_absolute_url())
+        return redirect(post.get_absolute_url())
     context = {
         "post": post,
         "form": form
