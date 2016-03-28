@@ -6,12 +6,15 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="thumbnail">
-                    <img src="" alt="">
+
                     <div class="caption">
                         <h3>
                             <a href='{{ post.get_absolute_url }}'>{{ post.title }}</a>
                             <small>{{ post.timestamp | timesince }} ago</small>
                         </h3>
+                        {% if post.image %}
+                            <img src="{{ post.image.url }}" alt="" class="img-responsive">
+                        {% endif %}
                         <p>{{ post.content | linebreaks | truncatewords:120 }}</p>
                         <p>
                             <a href="{{ post.get_absolute_url }}" class="btn btn-primary" role="button">View</a>

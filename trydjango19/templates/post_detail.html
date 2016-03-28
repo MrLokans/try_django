@@ -7,12 +7,15 @@
 
 {% block content %}
 <div class="col-sm-6 col-sm-offset-3">
- 
- <h1>{{ post.title }} <small>{{ post.timestamp }}</small></h1>
-<div class="post-content">
-    <h4>{{ post.content | linebreaks }}</h4><br>
-    <span>{{ post.updated }}</span>
-</div>       
+    
+    <h1>{{ post.title }} <small>{{ post.timestamp }}</small></h1>
+    <div class="post-content">
+        <h4>{{ post.content | linebreaks }}</h4><br>
+        {% if post.image %}
+            <img src="{{ post.image.url }}" alt="" class="img-responsive">
+        {% endif %}
+        <span>{{ post.updated }}</span>
+    </div>       
 </div>
 
 
