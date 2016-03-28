@@ -6,11 +6,14 @@
 {% endblock head_title %}
 
 {% block content %}
-<h3>{{ post.title }}</h3>
+<div class="col-sm-6 col-sm-offset-3">
+ 
+ <h1>{{ post.title }} <small>{{ post.timestamp }}</small></h1>
 <div class="post-content">
-    <h4>{{ post.content }}</h4>
-    <span>{{ post.timestamp }}</span>
+    <h4>{{ post.content | linebreaks }}</h4><br>
     <span>{{ post.updated }}</span>
-</div>    
+</div>       
+</div>
+
 
 {% endblock content %}
