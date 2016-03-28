@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, get_object_or_404, redirect
 
 from .models import Post
@@ -25,8 +26,18 @@ def post_detail(request, post_id=None):
 
 
 def post_list(request):
-    posts = Post.objects.all()
-    return render(request, "post_list.html", {"posts": posts})
+    post_list = Post.objects.all().order_by("-timestamp")
+    paginator = Paginator(post_list, 10)
+    page_request_var = "page"
+    page = request.GET.get(page_request_var, 1)
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
+    return render(request, "post_list.html", {"posts": posts,
+                                              "page_request_var": "page"})
 
 
 def post_update(request, post_id):
