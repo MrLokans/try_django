@@ -23,10 +23,8 @@ def post_create(request):
 def post_detail(request, slug=None):
 
     post = get_object_or_404(Post, slug=slug)
-    share_text = quote_plus(post.content)
     context = {
         "post": post,
-        "share_text": share_text
     }
     return render(request, "post_detail.html", context)
 
