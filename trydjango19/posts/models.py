@@ -1,14 +1,19 @@
 import os
 
 from django.db import models
+from django.utils.text import slugify
 from django.core.urlresolvers import reverse
+from django.db.models.signals import pre_save
 
 
 def upload_location(instance, filename):
     # filebase, extension = filename.split(".")
     # path = os.path.join(instance.id, instance.id)
     # path = ".".join(path, extension)
-    path = os.path.join(instance.id, filename)
+    if instance.id:
+        path = os.path.join(instance.id, filename)
+    else:
+        path = filename
     return path
 
 
@@ -37,4 +42,24 @@ class Post(models.Model):
         return self.__str__()
 
     def get_absolute_url(self):
-        return reverse("posts:detail", kwargs={'post_id': self.id})
+        return reverse("posts:detail", kwargs={'slug': self.slug})
+
+
+def create_slug(instance, new_slug=None):
+    slug = slugify(instance.title)
+    if new_slug is not None:
+        slug = new_slug
+    qs = Post.objects.filter(slug=slug).order_by("-id")
+    exists = qs.exists()
+    if exists:
+        new_slug = "{}-{}".format(slug, qs.first().id)
+        return create_slug(instance, new_slug=new_slug)
+    return slug
+
+
+def pre_save_post_receiver(sender, instance, *args, **kwargs):
+    if not instance.slug:
+        instance.slug = create_slug(instance)
+
+
+pre_save.connect(pre_save_post_receiver, sender=Post)
