@@ -18,6 +18,7 @@ class Post(models.Model):
         ordering = ["timestamp", "-updated"]
 
     title = models.CharField(max_length=120)
+    slug = models.SlugField(unique=True)
     image = models.ImageField(upload_to=upload_location,
                               null=True,
                               blank=True,
