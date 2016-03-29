@@ -15,7 +15,17 @@
             <img src="{{ post.image.url }}" alt="" class="img-responsive">
         {% endif %}
         <span>{{ post.updated }}</span>
-    </div>       
+    </div>   
+    <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}">
+       Facebook
+    </a>
+    <a href="https://twitter.com/home?status={{share_text}}{{ request.build_absolute_uri }}">
+       Twitter
+    </a>    
+
+
+    <a href='https://plus.google.com/share?url={{ request.build_absolute_uri }}'>GooglePlus </a>
+
 </div>
 
 
