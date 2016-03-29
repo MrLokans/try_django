@@ -1,18 +1,24 @@
-from urllib.parse import quote_plus
-
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, get_object_or_404, redirect
+from django.http import Http404
 
 from .models import Post
 from .forms import PostForm
 
 
 def post_create(request):
+
+    if not request.user.is_authenticated():
+        raise Http404
+
+    if not request.user.is_staff or not request.user.is_superuser:
+        raise Http404
     form = PostForm(request.POST or None, request.FILES or None)
 
     if form.is_valid():
         post = form.save(commit=False)
+        post.user = request.user
         post.save()
         messages.success(request, "Post successfull created.")
         return redirect(post.get_absolute_url())

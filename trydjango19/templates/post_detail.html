@@ -10,6 +10,9 @@
 <div class="col-sm-6 col-sm-offset-3">
     
     <h1>{{ post.title }} <small>{{ post.timestamp }}</small></h1>
+    {% if  post.user.get_full_name %}
+        <p>Author: {{ post.user.get_full_name }}</p>
+    {% endif %}
     <div class="post-content">
         <h4>{{ post.content | linebreaks }}</h4><br>
         {% if post.image %}
