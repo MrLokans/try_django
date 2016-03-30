@@ -10,7 +10,7 @@
                     <div class="caption">
                         <h3>
                             <a href='{{ post.get_absolute_url }}'>{{ post.title }}</a>
-                            <small>{{ post.timestamp | timesince }} ago</small>
+                            <small>{{ post.publish | timesince }} ago</small>
                         </h3>
                         {% if post.image %}
                             <img src="{{ post.image.url }}" alt="" class="img-responsive">

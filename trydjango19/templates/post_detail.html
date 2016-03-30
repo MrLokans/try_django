@@ -9,7 +9,7 @@
 {% block content %}
 <div class="col-sm-6 col-sm-offset-3">
     
-    <h1>{{ post.title }} <small>{{ post.timestamp }}</small></h1>
+    <h1>{{ post.title }} <small>{% if post.draft %}<span style="color:red">Draft</span>{% endif %}{{ post.publish }}</small></h1>
     {% if  post.user.get_full_name %}
         <p>Author: {{ post.user.get_full_name }}</p>
     {% endif %}
