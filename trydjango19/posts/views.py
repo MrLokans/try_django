@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import Http404
+from django.db.models import Q
 from django.utils import timezone
 
 from .models import Post
@@ -47,6 +48,16 @@ def post_list(request):
         post_list = Post.objects.all()
     else:
         post_list = Post.objects.active()
+
+    search_query = request.GET.get('search_query')
+    if search_query:
+        post_list = post_list.filter(
+            Q(title__icontains=search_query) |
+            Q(content__icontains=search_query) |
+            Q(user__first_name__icontains=search_query) |
+            Q(user__last_name__icontains=search_query)
+        ).distinct()
+
     paginator = Paginator(post_list, 10)
     page_request_var = "page"
     page = request.GET.get(page_request_var, 1)
