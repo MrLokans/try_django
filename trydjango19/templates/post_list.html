@@ -8,6 +8,7 @@
                 <div class="thumbnail">
 
                     <div class="caption">
+                        {% if post.draft %}<h3 style="color: red">Draft</h3>{% endif %}
                         <h3>
                             <a href='{{ post.get_absolute_url }}'>{{ post.title }}</a>
                             <small>{{ post.publish | timesince }} ago</small>
