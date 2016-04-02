@@ -12,6 +12,7 @@
     <h1>{{ post.title }} <small>{% if post.draft %}<span style="color:red">Draft</span>{% endif %}{{ post.publish }}</small></h1>
     {% if  post.user.get_full_name %}
         <p>Author: {{ post.user.get_full_name }}</p>
+        <span><a href="{{ request.build_absolute_uri }}edit">Edit</a></span>
     {% endif %}
     <div class="post-content">
 <div class="post-text content-markdown">
