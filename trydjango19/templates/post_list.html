@@ -11,6 +11,9 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="thumbnail">
+                    {% if post.image %}
+                        <img src="{{ post.image.url }}" alt="" class="img-responsive">
+                    {% endif %}
 
                     <div class="caption">
                         {% if post.draft %}<h3 style="color: red">Draft</h3>{% endif %}
@@ -18,13 +21,10 @@
                             <a href='{{ post.get_absolute_url }}'>{{ post.title }}</a>
                             <small>{{ post.publish | timesince }} ago</small>
                         </h3>
-                        {% if post.image %}
-                            <img src="{{ post.image.url }}" alt="" class="img-responsive">
-                        {% endif %}
                         {% if  post.user.get_full_name %}
                             <p>Author: {{ post.user.get_full_name }}</p>
                         {% endif %}
-                        <p>{{ post.content | linebreaks | truncatewords:120 }}</p>
+                        <p class="content-markdown">{{ post.content }}</p>
                         <p>
                             <a href="{{ post.get_absolute_url }}" class="btn btn-primary" role="button">View</a>
                             <!-- <a href="#" class="btn btn-default" role="button">Edit</a> -->
