@@ -36,11 +36,15 @@
             $(".content-markdown").each(function(){
                 currentBlock = $(this);
                 var postContent = currentBlock.text();
-                console.log(postContent)
                 var markedContent = marked(postContent);
-                console.log(markedContent)
                 currentBlock.html(markedContent);                
             });
+            $(".content-markdown img").each(function(){
+                currentImg = $(this);
+                console.log(currentImg);
+                currentImg.addClass("img-responsive");                
+            });
+
 
         });
     </script>
