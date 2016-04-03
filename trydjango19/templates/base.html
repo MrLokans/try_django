@@ -30,18 +30,17 @@
     
     <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.5/marked.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.5/marked.min.js"></script> -->
     <script type="text/javascript">
         $(document).ready(function(){
-            $(".content-markdown").each(function(){
-                currentBlock = $(this);
-                var postContent = currentBlock.text();
-                var markedContent = marked(postContent);
-                currentBlock.html(markedContent);                
-            });
-            $(".content-markdown img").each(function(){
+            // $(".content-markdown").each(function(){
+            //     currentBlock = $(this);
+            //     var postContent = currentBlock.text();
+            //     var markedContent = marked(postContent);
+            //     currentBlock.html(markedContent);                
+            // });
+            $(".post-detail-item img").each(function(){
                 currentImg = $(this);
-                console.log(currentImg);
                 currentImg.addClass("img-responsive");                
             });
 

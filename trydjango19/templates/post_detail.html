@@ -15,8 +15,8 @@
         <span><a href="{{ request.build_absolute_uri }}edit">Edit</a></span>
     {% endif %}
     <div class="post-content">
-<div class="post-text content-markdown">
-{{ post.content }}
+<div class="post-text post-detail-item">
+    {{ post.get_markdown }}
 </div>
         {% if post.image %}
             <img src="{{ post.image.url }}" alt="" class="img-responsive">
