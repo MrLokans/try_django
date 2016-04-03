@@ -24,7 +24,7 @@
                         {% if  post.user.get_full_name %}
                             <p>Author: {{ post.user.get_full_name }}</p>
                         {% endif %}
-                        {{ post.get_markdown }}
+                        {{ post.get_markdown | truncatewords_html:29 }}
                         <p>
                             <a href="{{ post.get_absolute_url }}" class="btn btn-primary" role="button">View</a>
                             <!-- <a href="#" class="btn btn-default" role="button">Edit</a> -->
