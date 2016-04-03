@@ -30,7 +30,7 @@
     
     <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.5/marked.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.5/marked.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
             // $(".content-markdown").each(function(){
@@ -43,6 +43,35 @@
                 currentImg = $(this);
                 currentImg.addClass("img-responsive");                
             });
+
+            var titleInput = $("#id_title");
+            var contentInput = $("#id_content");
+
+            setTitle(titleInput.val())
+            setContent(contentInput.val())
+
+            titleInput.keyup(function(){
+                setTitle(titleInput.val())
+            });
+
+
+            function setTitle(value) {
+                $("#preview-title").text(value);
+            }
+
+            function setContent(value){
+                var markedContent = marked(value);
+                $("#preview-content").html(markedContent);
+                $("#preview-content img").each(function(){
+                    $(this).addClass("img-responsive");
+                })
+            }
+
+            contentInput.keyup(function() {
+                setContent(contentInput.val());
+            });
+
+            // setContent(contentInput.val());
 
 
         });
