@@ -22,6 +22,11 @@
             <img src="{{ post.image.url }}" alt="" class="img-responsive">
         {% endif %}
         <span>{{ post.updated }}</span>
+
+        <div>
+            {{ post.comment_set.all }}
+        </div>
+
     </div>   
 
     <p>
