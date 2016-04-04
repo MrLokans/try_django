@@ -3,8 +3,12 @@
 <div class="col-sm-6 col-sm-offset-3">
 <h1>List of posts</h1>
 <form action="" method="GET">
-    <input type="text" name="search_query" placeholder="Search posts" value='{{ request.GET.search_query }}'>
-    <input type="submit" value="Search">
+    <div class="input-group search-input-group">
+        <input class="form-control" type="text" name="search_query" placeholder="Search posts" value='{{ request.GET.search_query }}'>
+        <span class="input-group-btn">
+            <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
+        </span>
+    </div>
 </form>
     {% if posts %}
         {% for post in posts %}

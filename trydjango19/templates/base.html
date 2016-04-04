@@ -53,7 +53,7 @@
             }
 
             function setContent(value){
-                var markedContent = marked(value);
+                var markedContent = marked(value || '');
                 $("#preview-content").html(markedContent);
                 $("#preview-content img").each(function(){
                     $(this).addClass("img-responsive");
