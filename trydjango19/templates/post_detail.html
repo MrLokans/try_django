@@ -24,7 +24,17 @@
         <span>{{ post.updated }}</span>
 
         <div>
-            {{ post.comment_set.all }}
+            <p class="lead">Comments</p>
+            <ul class="post-detail__comments">
+                {% for comment in comments %}
+                    <li class="post-detail__comment-content">
+                        <h4 class="post-detail__comment-content_author">{{ comment.user }}</h4>
+                        <div class="post-detail__comment-content_text">
+                            <small>{{ comment.content }} {{ comment.timestamp | timesince }} ago</small>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
         </div>
 
     </div>   
@@ -42,8 +52,6 @@
         </a>    
         <a href='https://plus.google.com/share?url={{ request.build_absolute_uri }}'>GooglePlus </a>
     </p>
- -->    <div class="fb-comments" data-href="{{ request.build_absolute_uri }}" data-numposts="5"></div>
-
 </div>
 {% include "facebook_sdk.html" %}
 
