@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.contenttypes.models import ContentType
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import Http404
@@ -6,6 +7,7 @@ from django.db.models import Q
 from django.utils import timezone
 
 from comments.models import Comment
+from comments.forms import CommentForm
 from .models import Post
 from .forms import PostForm
 
@@ -37,11 +39,35 @@ def post_detail(request, slug=None):
         if not request.user.is_staff or not request.user.is_superuser:
             raise Http404
 
+    initial_comment_data = {
+        "content_type": post.get_content_type,
+        "object_id": post.id
+    }
+
     comments = Comment.objects.filter_by_instance(post)
+    comment_form = CommentForm(request.POST or None,
+                               initial=initial_comment_data)
+
+    if comment_form.is_valid():
+        cont_type = comment_form.cleaned_data.get('content_type')
+        content_type = ContentType.objects.get(model=cont_type)
+        obj_id = comment_form.cleaned_data.get('object_id')
+        cont_data = comment_form.cleaned_data.get('content')
+
+        new_comment, created = Comment.objects.get_or_create(
+                user=request.user,
+                content_type=content_type,
+                object_id=obj_id,
+                content=cont_data
+            )
+
+        if created:
+            print("New comment successfully created.")
 
     context = {
         "post": post,
-        "comments": comments
+        "comments": comments,
+        "comment_form": comment_form
     }
     return render(request, "post_detail.html", context)
 
