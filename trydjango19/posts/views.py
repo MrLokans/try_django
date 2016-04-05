@@ -53,16 +53,29 @@ def post_detail(request, slug=None):
         content_type = ContentType.objects.get(model=cont_type)
         obj_id = comment_form.cleaned_data.get('object_id')
         cont_data = comment_form.cleaned_data.get('content')
+        parent_obj = None
+
+        try:
+            parent_id = int(request.POST.get('parent_id'))
+        except TypeError:
+            parent_id = None
+
+        if parent_id:
+            parent_qs = Comment.objects.filter(parent__id=parent_id)
+            if parent_qs.exists():
+                parent_obj = parent_qs.first()
 
         new_comment, created = Comment.objects.get_or_create(
                 user=request.user,
                 content_type=content_type,
                 object_id=obj_id,
-                content=cont_data
+                content=cont_data,
+                parent=parent_obj,
             )
 
         if created:
             print("New comment successfully created.")
+        return redirect(new_comment.content_object.get_absolute_url())
 
     context = {
         "post": post,

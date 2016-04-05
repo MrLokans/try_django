@@ -5,15 +5,23 @@ from django.contrib.contenttypes.models import ContentType
 
 
 class CommentManager(models.Manager):
+    def all(self):
+        """Only comments with no parents are rendered"""
+        qs = super().filter(parent=None)
+        return qs
+
     def filter_by_instance(self, instance):
         content_type = ContentType.objects.get_for_model(instance.__class__)
         object_id = instance.id
         comments = super().filter(content_type=content_type,
-                                  object_id=object_id)
+                                  object_id=object_id).filter(parent=None)
         return comments
 
 
 class Comment(models.Model):
+
+    class Meta:
+        ordering = ['-timestamp', ]
     user = models.ForeignKey(settings.AUTH_USER_MODEL, default=1)
 
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
@@ -21,9 +29,20 @@ class Comment(models.Model):
     content_object = GenericForeignKey('content_type', 'object_id')
     content = models.TextField()
 
+    parent = models.ForeignKey("self", null=True, blank=True)
+
     objects = CommentManager()
 
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __srt__(self):
         return str(self.user.username)
+
+    def children(self):
+        return Comment.objects.filter(parent=self)
+
+    @property
+    def is_parent(self):
+        if self.parent is not None:
+            return False
+        return True

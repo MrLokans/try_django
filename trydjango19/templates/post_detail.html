@@ -33,12 +33,26 @@
                     <input type="submit" value="Send comment" class="btn btn-default">
                 </form>
                 {% for comment in comments %}
-                    </blockquote>
                     <blockquote class="post-detail__comment-content">
                         <div class="post-detail__comment-content_text">
                             <p>{{ comment.content }} </p>
                             <footer>via {{ comment.user }} {{ comment.timestamp | timesince }} ago</footer>
                         </div>
+
+                       {% for child_comment in comment.children %}
+                            <blockquote>
+                                <p>{{ child_comment.content }} </p>
+                                <footer>via {{ child_comment.user }} {{ child_comment.timestamp | timesince }} ago</footer>
+                            </blockquote>                
+                        {% endfor %}
+
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        {{ comment_form |crispy }}
+                        <input type="hidden" name="parent_id" value='{{ comment.id }}'>
+                        <input type="submit" value="Reply" class="btn btn-default">
+                    </form>
+
                     </blockquote>
                 {% endfor %}
         </div>
