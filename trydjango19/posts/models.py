@@ -10,6 +10,8 @@ from django.db.models.signals import pre_save
 
 from markdown_deux import markdown
 
+from comments.models import Comment
+
 
 class PostManager(models.Manager):
     def active(self, *args, **kwargs):
@@ -62,6 +64,12 @@ class Post(models.Model):
     def get_markdown(self):
         content = self.content
         return mark_safe(markdown(content))
+
+    @property
+    def comments(self):
+        instance = self
+        qs = Comment.objects.filter_by_instance(instance)
+        return qs
 
 
 def create_slug(instance, new_slug=None):

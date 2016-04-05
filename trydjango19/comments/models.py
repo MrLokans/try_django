@@ -3,7 +3,14 @@ from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 
-# from posts.models import Post
+
+class CommentManager(models.Manager):
+    def filter_by_instance(self, instance):
+        content_type = ContentType.objects.get_for_model(instance.__class__)
+        object_id = instance.id
+        comments = super().filter(content_type=content_type,
+                                  object_id=object_id)
+        return comments
 
 
 class Comment(models.Model):
@@ -13,6 +20,8 @@ class Comment(models.Model):
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
     content = models.TextField()
+
+    objects = CommentManager()
 
     timestamp = models.DateTimeField(auto_now_add=True)
 

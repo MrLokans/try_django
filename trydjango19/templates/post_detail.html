@@ -25,16 +25,15 @@
 
         <div>
             <p class="lead">Comments</p>
-            <ul class="post-detail__comments">
                 {% for comment in comments %}
-                    <li class="post-detail__comment-content">
-                        <h4 class="post-detail__comment-content_author">{{ comment.user }}</h4>
+                    </blockquote>
+                    <blockquote class="post-detail__comment-content">
                         <div class="post-detail__comment-content_text">
-                            <small>{{ comment.content }} {{ comment.timestamp | timesince }} ago</small>
+                            <p>{{ comment.content }} </p>
+                            <footer>via {{ comment.user }} {{ comment.timestamp | timesince }} ago</footer>
                         </div>
-                    </li>
+                    </blockquote>
                 {% endfor %}
-            </ul>
         </div>
 
     </div>   

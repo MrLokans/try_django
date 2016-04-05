@@ -1,5 +1,4 @@
 from django.contrib import messages
-from django.contrib.contenttypes.models import ContentType
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import Http404
@@ -38,10 +37,7 @@ def post_detail(request, slug=None):
         if not request.user.is_staff or not request.user.is_superuser:
             raise Http404
 
-    content_type = ContentType.objects.get_for_model(Post)
-    object_id = post.id
-    comments = Comment.objects.filter(content_type=content_type,
-                                      object_id=object_id)
+    comments = Comment.objects.filter_by_instance(post)
 
     context = {
         "post": post,
