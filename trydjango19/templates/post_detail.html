@@ -11,7 +11,7 @@
 <div class="col-sm-6 col-sm-offset-3 ">
     
     <h1>{{ post.title }} <small>{% if post.draft %}<span style="color:red">Draft</span>{% endif %}{{ post.publish }}</small></h1>
-    <p>Expected reading time: {{ post.read_time | time:"i"}} min</p>
+    <p>Expected reading time: {% if post.read_time|time:"i" <= "01" %} < 1 minute {% else %} {{ post.read_time | time:"i"}} min {% endif %}</p>
     {% if  post.user.get_full_name %}
         <p>Author: {{ post.user.get_full_name }}</p>
         <span><a href="{{ request.build_absolute_uri }}edit">Edit</a></span>
