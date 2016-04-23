@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load urlify %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}
+
+    {{ post.title }} | {{ block.super }}
+{% endblock head_title %}
+
+{% block content %}
+
+<div class="col-sm-6 col-sm-offset-3 ">
+    <h1>Confirm comment deletion</h1>
+
+    <form action="" method="POST">
+        <p>Are you sure you want to delete: "{{ comment.content }}"?</p>
+        {% csrf_token %}
+        <input type="submit" value="Confirm" class="btn btn-warning">
+        <a href="{{ comment.get_absolute_url }}" class="btn btn-default">Cancel</a>
+    </form>
+
+
+</div>
+{% include "facebook_sdk.html" %}
+
+{% endblock content %}
