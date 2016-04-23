@@ -1,4 +1,5 @@
 import datetime
+import math
 import re
 
 from django.utils.html import strip_tags
@@ -18,7 +19,6 @@ def get_read_time(html_string):
     200 words per minute for the English languge
     """
     word_count = count_words(html_string)
-    reading_time_in_minutes = word_count / 200.0
-    reading_time_in_seconds = reading_time_in_minutes * 60
-    reading_time = str(datetime.timedelta(seconds=reading_time_in_seconds))
+    reading_time_in_minutes = math.ceil(word_count / 200.0)
+    reading_time = str(datetime.timedelta(minutes=reading_time_in_minutes))
     return reading_time
