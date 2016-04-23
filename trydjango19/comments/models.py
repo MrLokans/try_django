@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 
@@ -35,11 +36,16 @@ class Comment(models.Model):
 
     timestamp = models.DateTimeField(auto_now_add=True)
 
-    def __srt__(self):
+    def __str__(self):
         return str(self.user.username)
 
     def children(self):
-        return Comment.objects.filter(parent=self)
+        children = Comment.objects.filter(parent=self)
+        return children
+
+    def get_absolute_url(self):
+        return reverse("comments:comment_thread",
+                       kwargs={"comment_id": self.id})
 
     @property
     def is_parent(self):

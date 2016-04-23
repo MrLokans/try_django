@@ -61,16 +61,16 @@ def post_detail(request, slug=None):
             parent_id = None
 
         if parent_id:
-            parent_qs = Comment.objects.filter(parent__id=parent_id)
-            if parent_qs.exists():
+            parent_qs = Comment.objects.filter(id=parent_id)
+            if parent_qs.exists() and parent_qs.count() == 1:
                 parent_obj = parent_qs.first()
 
         new_comment, created = Comment.objects.get_or_create(
-                user=request.user,
-                content_type=content_type,
-                object_id=obj_id,
-                content=cont_data,
-                parent=parent_obj,
+                        user=request.user,
+                        content_type=content_type,
+                        object_id=obj_id,
+                        content=cont_data,
+                        parent=parent_obj,
             )
 
         if created:
