@@ -18,11 +18,17 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.conf import settings
 
+from accounts.views import (
+    login_view,
+    logout_view
+)
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^posts/', include("posts.urls", namespace="posts")),
     url(r'^comments/', include("comments.urls", namespace="comments")),
+    url(r'^login/', login_view, name="login"),
+    url(r'^logout/', logout_view, name="logout"),
 ]
 
 if settings.DEBUG:
