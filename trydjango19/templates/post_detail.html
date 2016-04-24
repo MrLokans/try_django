@@ -40,7 +40,7 @@
                             <a class="comment-reply-btn" href="#">Reply</a> | 
                             <a href="{{ comment.get_absolute_url }}">Thread</a>
                             {% if request.user == comment.user %}
-                                <a href="{{ comment.get_absolute_url }}/delete">Remove</a>
+                                <a href="{{ comment.get_delete_url }}">Remove</a>
                             {% endif %}
                         </footer>
                         <div class="comment-replies">
@@ -49,7 +49,7 @@
                                 <p>{{ child_comment.content }} </p>
                                 <footer>via {{ child_comment.user }} {{ child_comment.timestamp | timesince }} ago
                                     {% if request.user == comment.user %}
-                                        <a href="{{ comment.get_absolute_url }}/delete">Remove</a>
+                                        <a href="{{ comment.get_delete_url }}">Remove</a>
                                     {% endif %}
                                 </footer>
                             </blockquote>                

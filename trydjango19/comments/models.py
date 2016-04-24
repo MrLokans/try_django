@@ -47,6 +47,10 @@ class Comment(models.Model):
         return reverse("comments:comment_thread",
                        kwargs={"comment_id": self.id})
 
+    def get_delete_url(self):
+        return reverse("comments:comment_delete",
+                       kwargs={"comment_id": self.id})
+
     @property
     def is_parent(self):
         if self.parent is not None:
