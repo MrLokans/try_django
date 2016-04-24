@@ -1,13 +1,25 @@
 from django.contrib import messages
+from django.http import Http404, HttpResponse
 from django.contrib.contenttypes.models import ContentType
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, redirect
+from django.core.exceptions import ObjectDoesNotExist
 
 from .models import Comment
 from .forms import CommentForm
 
 
 def comment_delete(request, comment_id):
-    obj = get_object_or_404(Comment, id=comment_id)
+
+    try:
+        obj = Comment.objects.get(id=int(comment_id))
+    except ObjectDoesNotExist:
+        print("Object with id {} is not found.".format(comment_id))
+        raise Http404
+
+    if obj.user != request.user:
+        response = HttpResponse("You do not have permission to delete comment.")
+        response.status_code = 403
+        return response
 
     if request.method == 'POST':
         parent_obj_url = obj.content_object.get_absolute_url()
@@ -23,8 +35,16 @@ def comment_delete(request, comment_id):
 
 
 def comment_thread(request, comment_id):
-    # obj = get_object_or_404(Comment, id=comment_id)
-    obj = Comment.objects.filter(id=comment_id).first()
+
+    try:
+        obj = Comment.objects.get(id=int(comment_id))
+    except ObjectDoesNotExist:
+        print("Object with id {} is not found.".format(comment_id))
+        raise Http404
+
+    # Refer to the thread start topic
+    if not obj.is_parent:
+        obj = obj.parent
 
     initial_comment_data = {
         "content_type": obj.content_type,
