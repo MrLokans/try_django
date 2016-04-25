@@ -16,7 +16,9 @@ def login_view(request):
         username = form.cleaned_data.get('username')
         password = form.cleaned_data.get('password')
 
-        login(request)
+        user = authenticate(username=username, password=password)
+        login(request, user)
+
     context = {"form": form}
     return render(request, "login.html", context)
 
