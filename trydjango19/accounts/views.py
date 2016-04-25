@@ -4,7 +4,8 @@ from django.contrib.auth import (
     login,
     logout
 )
-from django.shortcuts import render
+from django.core.urlresolvers import reverse
+from django.shortcuts import render, redirect
 
 
 from .forms import UserLoginForm
@@ -29,5 +30,5 @@ def register_view(request):
 
 
 def logout_view(request):
-    context = {}
-    return render(request, "form.html", context)
+    logout(request)
+    return redirect(reverse("login"))
