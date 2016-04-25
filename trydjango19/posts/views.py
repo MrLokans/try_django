@@ -48,7 +48,7 @@ def post_detail(request, slug=None):
     comment_form = CommentForm(request.POST or None,
                                initial=initial_comment_data)
 
-    if comment_form.is_valid():
+    if comment_form.is_valid() and request.user.is_authenticated():
         cont_type = comment_form.cleaned_data.get('content_type')
         content_type = ContentType.objects.get(model=cont_type)
         obj_id = comment_form.cleaned_data.get('object_id')

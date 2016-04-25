@@ -28,11 +28,15 @@
         <div>
             <p class="lead">Comments</p>
                 <hr>
+                {% if request.user.is_auhenticated %}
                 <form action="" method="POST">
                     {% csrf_token %}
                     {{ comment_form |crispy }}
                     <input type="submit" value="Send comment" class="btn btn-default">
                 </form>
+                {% else %}
+                    <p class="not-logged-in-comment-msg">You must be logged in to comment</p>
+                {% endif %}
                 {% for comment in comments %}
                     <blockquote class="post-detail__comment-content">
                         <p>{{ comment.content }} </p>
@@ -56,14 +60,16 @@
                         {% endfor %}                            
                         </div>
 
-
+                {% if request.user.is_auhenticated %}
                     <form action="" method="POST">
                         {% csrf_token %}
                         {{ comment_form |crispy }}
                         <input type="hidden" name="parent_id" value='{{ comment.id }}'>
                         <input type="submit" value="Reply" class="btn btn-default">
                     </form>
-
+                {% else %}
+                    <p class="not-logged-in-comment-msg">You must be logged in to comment</p>
+                {% endif %}
                     </blockquote>
                 {% endfor %}
         </div>
