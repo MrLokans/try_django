@@ -20,7 +20,8 @@ from django.conf import settings
 
 from accounts.views import (
     login_view,
-    logout_view
+    logout_view,
+    register_view
 )
 
 urlpatterns = [
@@ -29,6 +30,7 @@ urlpatterns = [
     url(r'^comments/', include("comments.urls", namespace="comments")),
     url(r'^login/', login_view, name="login"),
     url(r'^logout/', logout_view, name="logout"),
+    url(r'^register/', register_view, name="register"),
 ]
 
 if settings.DEBUG:

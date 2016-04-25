@@ -8,7 +8,7 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
 
 
-from .forms import UserLoginForm
+from .forms import UserLoginForm, UserRegisterForm
 
 
 def login_view(request):
@@ -25,8 +25,19 @@ def login_view(request):
 
 
 def register_view(request):
-    context = {}
-    return render(request, "form.html", context)
+    form = UserRegisterForm(request.POST or None)
+    if form.is_valid():
+        user = form.save(commit=False)
+        password = form.cleaned_data.get('password')
+        user.set_password(password)
+        user.save()
+
+        created_user = authenticate(username=user.username, password=password)
+        login(request, created_user)
+    context = {
+        "form": form
+    }
+    return render(request, "register.html", context)
 
 
 def logout_view(request):
