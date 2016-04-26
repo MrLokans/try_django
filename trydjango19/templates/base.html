@@ -15,6 +15,19 @@
 
 
     <div class="container">
+        <ol class="breadcrumb menu-items">
+            <li class="menu-list-item"><a href="{% url 'posts:list' %}">Home</a></li>
+
+            {% block post_detail_link %}
+            {% endblock %}
+            {% if request.user.is_authenticated %}
+                <li class="menu-list-item pull-right"><a href="{% url 'logout' %}">Logout</a></li>
+            {% else %}
+                <li class="menu-list-item pull-right"><a href="{% url 'register' %}">Register</a></li>
+                <li class="menu-list-item pull-right"><a href="{% url 'login' %}">Login</a></li>
+            {% endif %}
+            
+        </ol>
         {% block content %}
         {% endblock content %}
     </div>

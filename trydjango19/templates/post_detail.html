@@ -3,9 +3,12 @@
 {% load crispy_forms_tags %}
 
 {% block head_title %}
-
     {{ post.title }} | {{ block.super }}
 {% endblock head_title %}
+
+{% block post_detail_link %}
+    <li><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></li>
+{% endblock %}
 
 {% block content %}
 <div class="col-sm-6 col-sm-offset-3 ">
@@ -28,7 +31,7 @@
         <div>
             <p class="lead">Comments</p>
                 <hr>
-                {% if request.user.is_auhenticated %}
+                {% if request.user.is_authenticated %}
                 <form action="" method="POST">
                     {% csrf_token %}
                     {{ comment_form |crispy }}
@@ -60,7 +63,7 @@
                         {% endfor %}                            
                         </div>
 
-                {% if request.user.is_auhenticated %}
+                {% if request.user.is_authenticated %}
                     <form action="" method="POST">
                         {% csrf_token %}
                         {{ comment_form |crispy }}
