@@ -8,6 +8,7 @@ from rest_framework.generics import (
 )
 
 from rest_framework.filters import SearchFilter, OrderingFilter
+
 from rest_framework.permissions import (
     AllowAny,
     IsAuthenticated,
@@ -22,6 +23,7 @@ from posts.api.serializers import (
     PostCreateUpdateSerializer
 )
 from posts.api.permissions import IsOwnerOrReadOnly
+from posts.api.pagination import PostLimitOffsetPagination, PostPageNumberPagination
 
 
 class PostListAPIView(ListAPIView):
@@ -29,6 +31,7 @@ class PostListAPIView(ListAPIView):
     filter_backends = [SearchFilter, OrderingFilter]
     ordering = 'title'
     search_fields = ['title', 'content', 'user__first_name']
+    pagination_class = PostPageNumberPagination
 
     def get_queryset(self, *args, **kwargs):
         post_list = Post.objects.all()
