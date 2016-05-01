@@ -4,16 +4,18 @@ from posts.models import Post
 
 
 class PostListSerializer(serializers.ModelSerializer):
+    url = serializers.HyperlinkedIdentityField(
+        # same as 'reverse' for urls
+        view_name='posts-api:detail',
+        lookup_field='pk'
+    )
+
     class Meta:
         model = Post
         fields = [
-            'user',
+            'url',
             'id',
             'title',
-            'slug',
-            'content',
-            'publish',
-            'updated'
         ]
 
 
