@@ -7,6 +7,7 @@ from rest_framework.generics import (
     DestroyAPIView,
 )
 
+from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.permissions import (
     AllowAny,
     IsAuthenticated,
@@ -25,6 +26,9 @@ from posts.api.permissions import IsOwnerOrReadOnly
 
 class PostListAPIView(ListAPIView):
     serializer_class = PostListSerializer
+    filter_backends = [SearchFilter, OrderingFilter]
+    ordering = 'title'
+    search_fields = ['title', 'content', 'user__first_name']
 
     def get_queryset(self, *args, **kwargs):
         post_list = Post.objects.all()
