@@ -7,6 +7,7 @@ class PostListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = [
+            'user',
             'id',
             'title',
             'slug',
@@ -20,6 +21,7 @@ class PostDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = [
+            'user',
             'id',
             'title',
             'slug',

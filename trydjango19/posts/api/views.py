@@ -3,8 +3,14 @@ from rest_framework.generics import (
     ListAPIView,
     RetrieveUpdateAPIView,
     RetrieveAPIView,
-    UpdateAPIView,
     DestroyAPIView,
+)
+
+from rest_framework.permissions import (
+    AllowAny,
+    IsAuthenticated,
+    IsAdminUser,
+    IsAuthenticatedOrReadOnly,
 )
 
 from posts.models import Post
@@ -13,6 +19,7 @@ from posts.api.serializers import (
     PostDetailSerializer,
     PostCreateUpdateSerializer
 )
+from posts.api.permissions import IsOwnerOrReadOnly
 
 
 class PostListAPIView(ListAPIView):
@@ -23,6 +30,7 @@ class PostListAPIView(ListAPIView):
 class PostCreateAPIView(CreateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostCreateUpdateSerializer
+    permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -36,6 +44,7 @@ class PostDetailAPIView(RetrieveAPIView):
 class PostUpdateAPIView(RetrieveUpdateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostCreateUpdateSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 
     def perform_update(self, serializer):
         serializer.save(user=self.request.user)
@@ -44,3 +53,4 @@ class PostUpdateAPIView(RetrieveUpdateAPIView):
 class PostDeleteAPIView(DestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostDetailSerializer
+    permission_classes = [IsAuthenticated]
