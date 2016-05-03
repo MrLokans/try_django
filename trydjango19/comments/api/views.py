@@ -19,6 +19,7 @@ from rest_framework.permissions import (
 from comments.models import Comment
 from comments.api.serializers import (
     CommentSerializer,
+    CommentDetailSerializer
 )
 from posts.api.permissions import IsOwnerOrReadOnly
 from posts.api.pagination import PostLimitOffsetPagination, PostPageNumberPagination
@@ -53,7 +54,9 @@ class CommentListAPIView(ListAPIView):
 
 class CommentDetailAPIView(RetrieveAPIView):
     queryset = Comment.objects.all()
-    serializer_class = CommentSerializer
+    serializer_class = CommentDetailSerializer
+    # lookup_field = 'id'
+    lookup_url_kwarg = 'comment_id'
 
 
 # class CommentUpdateAPIView(RetrieveUpdateAPIView):
