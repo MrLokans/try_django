@@ -1,6 +1,8 @@
 from rest_framework import serializers
 
 from posts.models import Post
+from comments.api.serializers import CommentSerializer
+from comments.models import Comment
 
 
 class PostListSerializer(serializers.ModelSerializer):
@@ -36,6 +38,7 @@ class PostListSerializer(serializers.ModelSerializer):
 class PostDetailSerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField()
     image = serializers.SerializerMethodField()
+    comments = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
@@ -47,7 +50,8 @@ class PostDetailSerializer(serializers.ModelSerializer):
             'slug',
             'content',
             'publish',
-            'updated'
+            'updated',
+            'comments'
         ]
 
     def get_user(self, obj):
@@ -59,6 +63,11 @@ class PostDetailSerializer(serializers.ModelSerializer):
         except:
             image_url = None
         return image_url
+
+    def get_comments(self, obj):
+        comments = Comment.objects.filter_by_instance(obj)
+        comments = CommentSerializer(comments, many=True).data
+        return comments
 
 
 class PostCreateUpdateSerializer(serializers.ModelSerializer):
