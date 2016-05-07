@@ -23,7 +23,7 @@ class CommentManager(models.Manager):
         model_qs = ContentType.object.filter(model=model_type)
         if model_qs.exists():
             SomeModel = model_qs.first().model_class()
-            obj_qs = SomeModel.objects.filter(id=self.id)
+            obj_qs = SomeModel.objects.filter(id=id)
             if obj_qs.exists() and obj_qs.count() == 1:
                 instance = self.model()
                 instance.content = content

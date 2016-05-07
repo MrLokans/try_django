@@ -19,7 +19,8 @@ from rest_framework.permissions import (
 from comments.models import Comment
 from comments.api.serializers import (
     CommentSerializer,
-    CommentDetailSerializer
+    CommentDetailSerializer,
+    create_comment_serializer
 )
 from posts.api.permissions import IsOwnerOrReadOnly
 from posts.api.pagination import PostLimitOffsetPagination, PostPageNumberPagination
@@ -43,13 +44,20 @@ class CommentListAPIView(ListAPIView):
         return comment_list
 
 
-# class CommentCreateAPIView(CreateAPIView):
-#     queryset = Comment.objects.all()
-#     serializer_class = CommentSerializer
-#     permission_classes = [IsAuthenticated]
+class CommentCreateAPIView(CreateAPIView):
+    queryset = Comment.objects.all()
+    permission_classes = [IsAuthenticated]
 
-#     def perform_create(self, serializer):
-#         serializer.save(user=self.request.user)
+    def get_serializer_class(self):
+        model_type = self.request.GET.get("type", "post")
+        id = self.request.GET.get("id")
+        parent_id = self.request.GET.get("parent_id")
+        return create_comment_serializer(model_type=model_type,
+                                         id=id,
+                                         parent_id=parent_id)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 
 class CommentDetailAPIView(RetrieveAPIView):

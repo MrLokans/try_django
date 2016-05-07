@@ -7,7 +7,8 @@ from comments.models import Comment
 User = get_user_model()
 
 
-def create_comment_serializer(model_type='post', id=None, parent_id=None):
+def create_comment_serializer(model_type='post', com_id=None,
+                              parent_id=None, user=None):
     class CommentCreateSerializer(serializers.ModelSerializer):
         class Meta:
             model = Comment
@@ -19,10 +20,11 @@ def create_comment_serializer(model_type='post', id=None, parent_id=None):
             ]
 
         def __init__(self, *args, **kwargs):
-            self.type = model_type
-            self.id = id
+            self.model_type = model_type
+            self.comment_id = id
             self.parent_obj = None
-            if self.parent_id:
+            self.user = user
+            if parent_id:
                 parent_qs = Comment.objects.filter(id=parent_id)
                 if parent_qs.exists() and parent_qs.count() == 1:
                     self.parent_obj = parent_qs.first()
@@ -30,26 +32,28 @@ def create_comment_serializer(model_type='post', id=None, parent_id=None):
 
         def validate(self, data):
             model_type = self.model_type
-            model_qs = ContentType.object.filter(model=model_type)
+            model_qs = ContentType.objects.filter(model=model_type)
             if not model_qs.exists() or model_qs.count() != 1:
-                raise serializers.Validationerror("Invalid content type.")
+                raise serializers.ValidationError("Invalid content type.")
             SomeModel = model_qs.first().model_class()
-            obj_qs = SomeModel.objects.filter(id=self.id)
+            obj_qs = SomeModel.objects.filter(id=self.comment_id)
             if not obj_qs.exists() or obj_qs.count() != 1:
-                raise serializers.Validationerror("Invalid content type id.")
+                raise serializers.ValidationError("Invalid content type id.")
             return data
 
         def create(self, validated_data):
             content = validated_data.get("content")
-            user = User.objects.all().first()
+            if self.user is not None:
+                main_user = user
+            else:
+                main_user = User.objects.all().first()
             model_type = self.model_type
-            id = self.id
+            id = self.comment_id
             parent_obj = self.parent_obj
             comment = Comment.objects.create_by_model_type(model_type, id,
-                                                           user, content,
+                                                           main_user, content,
                                                            parent_obj=parent_obj)
             return comment
-
 
     return CommentCreateSerializer
 
