@@ -1,7 +1,10 @@
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
 from comments.models import Comment
+
+User = get_user_model()
 
 
 def create_comment_serializer(model_type='post', id=None, parent_id=None):
@@ -35,6 +38,18 @@ def create_comment_serializer(model_type='post', id=None, parent_id=None):
             if not obj_qs.exists() or obj_qs.count() != 1:
                 raise serializers.Validationerror("Invalid content type id.")
             return data
+
+        def create(self, validated_data):
+            content = validated_data.get("content")
+            user = User.objects.all().first()
+            model_type = self.model_type
+            id = self.id
+            parent_obj = self.parent_obj
+            comment = Comment.objects.create_by_model_type(model_type, id,
+                                                           user, content,
+                                                           parent_obj=parent_obj)
+            return comment
+
 
     return CommentCreateSerializer
 
